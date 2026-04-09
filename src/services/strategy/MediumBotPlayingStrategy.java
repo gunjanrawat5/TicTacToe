@@ -1,13 +1,13 @@
-package services;
+package services.strategy;
 
 import model.*;
 import model.constants.CellState;
 
 import java.util.List;
 
-public class RandomBotPlayingStrategy {
-
-    public static Move executeMove(Player player, Game game){
+public class MediumBotPlayingStrategy implements  BotPlayingStrategy{
+    @Override
+    public Move executeMove(Player player, Game game) {
         Board board = game.getBoard();
         Move move = null;
         for(List<Cell> cells : board.getCells()){
@@ -22,6 +22,5 @@ public class RandomBotPlayingStrategy {
             }
         }
         return  move;
-        // TODO : Randomise move for bot - figure out empty cells and choose cell randomly
     }
 }

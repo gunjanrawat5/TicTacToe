@@ -1,11 +1,11 @@
 package services;
 
 import exception.InvalidCellException;
-import model.Cell;
-import model.Game;
-import model.Move;
-import model.Player;
+import model.*;
+import model.constants.BotDifficultyLevel;
 import model.constants.CellState;
+import services.strategy.BotPlayingStrategy;
+import services.strategy.BotPlayingStrategyFactory;
 
 public class GameService {
     public Move executeMove(Player player, Game game, int row, int col){
@@ -19,5 +19,12 @@ public class GameService {
         game.getMoves().add(move);
         game.getBoardState().add(game.getBoard().clone());
         return move;
+    }
+
+
+    public Move executeMove(Bot bot, Game game){
+        BotDifficultyLevel botDifficultyLevel = bot.getBotDifficultyLevel();
+        BotPlayingStrategy botPlayingStrategy = BotPlayingStrategyFactory.getBotPlayingStrategy(botDifficultyLevel);
+        return botPlayingStrategy.executeMove(bot,game);
     }
 }
