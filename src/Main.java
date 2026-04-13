@@ -1,5 +1,6 @@
 import controller.GameController;
 import exception.GameDrawnException;
+import exception.InvalidCellException;
 import model.Game;
 import model.Move;
 import model.Player;
@@ -33,6 +34,7 @@ public class Main {
         int moveIndex = 0;
         gameController.displayBoard(game);
         while(true){
+            try {
             Player currentPlayer = game.getPlayers().get(moveIndex);
             System.out.println("Player to make a move: " + currentPlayer.getName());
             Move currentMove = gameController.createMove(currentPlayer,game);
@@ -49,16 +51,19 @@ public class Main {
                 }
 
             }
-            try {
-                GameState gameState = gameController.checkWinner(game,currentMove);
-                if(gameState.equals(GameState.WINNER)){
-                    game.setWinner(currentPlayer);
-                    System.out.println("Game over ! The winner is : " + currentPlayer.getName());
-                    break;
+
+            GameState gameState = gameController.checkWinner(game,currentMove);
+            if(gameState.equals(GameState.WINNER)){
+                game.setWinner(currentPlayer);
+                System.out.println("Game over ! The winner is : " + currentPlayer.getName());
+                break;
                 }
             } catch (GameDrawnException ex){
                 System.out.println("Game ends in a draw !");
                 break;
+            } catch (InvalidCellException ex){
+                System.out.println("Invalid cell, Enter again !");
+                continue;
             }
             moveIndex = (moveIndex + 1)% (dimension-1);
 
