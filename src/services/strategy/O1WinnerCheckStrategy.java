@@ -5,6 +5,7 @@ import model.Board;
 import model.Move;
 import model.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class O1WinnerCheckStrategy implements WinnerCheckStrategy {
         this.topLeftDiagonalMap = new HashMap<>();
         this.topRightDiagonalMap = new HashMap<>();
         this.cornerMap = new HashMap<>();
+        rowMaps = new ArrayList<>();
+        colMaps = new ArrayList<>();
         initialiseMaps(size);
     }
 
@@ -48,7 +51,7 @@ public class O1WinnerCheckStrategy implements WinnerCheckStrategy {
         if (row == col) {
             topRightDiagonalMap.put(symbol, topRightDiagonalMap.getOrDefault(symbol, 0) + 1);
         }
-        if (topLeftDiagonalMap.get(symbol) == size || topRightDiagonalMap.get(symbol) == size) {
+        if (topLeftDiagonalMap.getOrDefault(symbol,0) == size || topRightDiagonalMap.getOrDefault(symbol,0) == size) {
             return currentMove.getPlayer();
         }
 
@@ -57,7 +60,7 @@ public class O1WinnerCheckStrategy implements WinnerCheckStrategy {
             cornerMap.put(symbol, cornerMap.getOrDefault(symbol, 0) + 1);
         }
 
-        if (cornerMap.get(symbol) == 4) {
+        if (cornerMap.getOrDefault(symbol,0) == 4) {
             return currentMove.getPlayer();
         }
 

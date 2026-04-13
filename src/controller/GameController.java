@@ -3,6 +3,7 @@ package controller;
 import model.*;
 import model.constants.GameState;
 import model.constants.PlayerType;
+import services.BoardService;
 import services.GameService;
 import services.PlayerService;
 import services.strategy.EasyBotPlayingStrategy;
@@ -13,13 +14,15 @@ public class GameController {
     private Scanner sc;
     private PlayerService playerService;
     private GameService gameService;
-    public GameController(PlayerService playerService,GameService gameService){
+    private BoardService boardService;
+    public GameController(PlayerService playerService, GameService gameService, BoardService boardService){
         this.sc = new Scanner(System.in);
         this.playerService = playerService;
         this.gameService = gameService;
+        this.boardService = boardService;
     }
     public List<Player> generatePlayerList(int playerCount){
-        System.out.println("Please enter 1 for BOT and 0 for HUMAN");
+        System.out.println("Please enter 1 if you want a bot in the game, else 0: ");
         int botCheck = sc.nextInt();
         List<Player> players = new ArrayList<>();
         if(botCheck == 1){
@@ -31,9 +34,9 @@ public class GameController {
         }
         for(int i = 0; i<playerCount;i++){
             System.out.println("Enter the name of player: ");
-            String playerName = sc.nextLine();
+            String playerName = sc.next();
             System.out.println("Enter the symbol for player: "+ playerName);
-            char symbol = sc.nextLine().charAt(0);
+            char symbol = sc.next().charAt(0);
             Player player = playerService.createPlayer(playerName,symbol);
             players.add(player);
         }
@@ -52,7 +55,7 @@ public class GameController {
             return gameService.executeMove(player,game,row,col);
         }
         else{
-            return null;
+            return gameService.executeMove(player, game);
         }
     }
 
@@ -60,8 +63,12 @@ public class GameController {
 
     public void replayGame(Game game){};
 
-    public GameState checkWinner(Board board, Move move){
+    public GameState checkWinner(Game game, Move move){
 
-        return null;
+        return gameService.checkWinner(game,move);
+    }
+
+    public void displayBoard(Game game){
+        boardService.displayBoard(game.getBoard());
     }
 }
